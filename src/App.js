@@ -20,11 +20,11 @@ function App() {
     <main>
     <Suspense fallback={<Loading/>}> 
     <Routes> 
-      <Route path="/" exact component={Home} />
-      <Route path="/history" component={History} />
-      <Route path="/about" component={About} />
-      <Route path="/login" component={Login} />
-      <Route path="/register" component={Register} />
+      <Route path="/" exact element={<Home/>} />
+      <Route path="/history" element={<History/>} />
+      <Route path="/about" element={<About/>} />
+      <Route path="/login" element={<Login/>} />
+      <Route path="/register" element={<Register/>} />
       
     </Routes>
     </Suspense>

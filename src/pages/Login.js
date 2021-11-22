@@ -1,6 +1,8 @@
 import React from 'react'
 import { Form, Input, Button, Checkbox } from 'antd'
 import styled from 'styled-components'
+import {useStores} from '../stores'
+import {useNavigate} from 'react-router-dom'
 
 const Wrapper = styled.div`
     max-width: 600px;
@@ -13,8 +15,19 @@ const Title = styled.h1`
     text-align:center;
 `
 const Component = () => {
+  const {AuthStore} = useStores()
+  const history = useNavigate()
     const onFinish = (values) => {
-      console.log('Success:', values);
+      AuthStore.setUsername(values.username)
+      AuthStore.setPassword(values.password)
+      AuthStore.login()
+      .then(()=>{
+        console.log('登录成功')
+        history('./')
+      }).catch(
+        (err)=>{console.log('登陆失败')
+      }
+      )
     };
   
     const onFinishFailed = (errorInfo) => {
@@ -23,7 +36,7 @@ const Component = () => {
     const validateUsername = (rule,value)=>{
         if(/\W/.test(value)) return Promise.reject('只能是字母数字下划线')
         if(value.length < 4 || value.length > 10) return Promise.reject('长度为4~10个字符串')
-        Promise.resolve(value)
+        return Promise.resolve(value)
     }
     return (
     <Wrapper>
@@ -72,7 +85,6 @@ const Component = () => {
         </Form.Item>
 
         
-  
         <Form.Item
           wrapperCol={{
             offset: 12,

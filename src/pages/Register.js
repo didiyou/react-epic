@@ -2,7 +2,7 @@ import React from 'react'
 import { Form, Input, Button, Checkbox } from 'antd'
 import styled from 'styled-components'
 import {useStores} from '../stores'
-
+import {useNavigate} from 'react-router-dom'
 
 const Wrapper = styled.div`
     max-width: 600px;
@@ -16,25 +16,30 @@ const Title = styled.h1`
 `
 const Component = () => {
     const {AuthStore} =useStores()
-
+    const history = useNavigate()
     const onFinish = (values) => {
         console.log('点击注册')
       console.log('Success:', values);
       AuthStore.setUsername(values.username)
       AuthStore.setPassword(values.password)
       AuthStore.register()
-      .then(()=>{console.log('注册成功')})
+      .then(()=>{
+        console.log('注册成功')
+        history('./')
+    })
       .catch(()=>{console.log('注册失败')})
     };
   
     const onFinishFailed = (errorInfo) => {
       console.log('Failed:', errorInfo);
     };
+    
     const validateUsername = (rule,value)=>{
         if(/\W/.test(value)) return Promise.reject('只能是字母数字下划线')
         if(value.length < 4 || value.length > 10) return Promise.reject('长度为4~10个字符串')
-        Promise.resolve(value)
+        return Promise.resolve(value)
     }
+
     const validateConfirm = ({getFieldValue})=>(
         {
             validator(rule,value){
@@ -84,7 +89,6 @@ const Component = () => {
         >
           <Input />
         </Form.Item>
-  
         <Form.Item
           label="密码"
           name="password"
@@ -93,12 +97,10 @@ const Component = () => {
               required: true,
               message: '请输入密码',
             },
-            
           ]}
         >
           <Input.Password />
         </Form.Item>
-
         <Form.Item
           label="确认密码"
           name="confirmPassword"
@@ -112,13 +114,11 @@ const Component = () => {
         >
           <Input.Password />
         </Form.Item>
-  
         <Form.Item
           wrapperCol={{
             offset: 12,
             span: 4,
           }}
-        
         >
           <Button type="primary" htmlType="submit">
             提交
@@ -128,5 +128,7 @@ const Component = () => {
       </Wrapper>
     );
   };
+
+
 
 export default Component

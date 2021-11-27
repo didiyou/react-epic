@@ -31,10 +31,9 @@ const Auth = {
 
 login(username,password){
     return new Promise((resolve,reject)=>{
-        console.log(username)
-        user.logIn(username, password).then(loginedUser=>
+        User.logIn(username, password).then(loginedUser=>
             {
-            console.log('上传成功')
+            
             resolve(loginedUser)
         },error=>{
             console.log('error is :',error)
@@ -43,10 +42,10 @@ login(username,password){
     })
 },
  logout(){
-    user.logOut();
+    User.logOut();
  },
  getCurrentUser(){
-     return user.current()
+     return User.current()
  }
 }
 
@@ -54,7 +53,7 @@ const Uploader = {
     add(file,filename){
     const item = new AV.Object('Image')
     const avFile = new AV.File(filename,file)
-    item.set('filename',filename)
+    item.set(filename,filename)
     item.set('owner',AV.User.current())
     item.set('url',avFile)
     return new Promise((resolve,reject)=>{
@@ -62,10 +61,27 @@ const Uploader = {
             console.log('保存成功')
             resolve(serverFile)
         },
-        error=>{console.log('保存失败')
+        error=>{
+        console.log('保存失败')
         reject(error)}
     )
-    })
+    })},
+    find({page=0,limit=10}){
+        const query = new AV.Query('Image')
+        query.include('owner') 
+        query.limit(limit)
+        query.descending('createdAt')
+        query.skip(page*limit)
+        query.equalTo('owner',AV.User.current())
+        return new Promise((resolve,reject)=>{
+            query.find()
+                .then(results=>resolve(results))
+                .catch(error=>reject(error))
+        })
     }
+    
 }
-  export {Auth}
+  export {
+      Auth,
+      Uploader
+}

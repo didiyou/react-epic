@@ -3,6 +3,7 @@ import { Form, Input, Button, Checkbox } from 'antd'
 import styled from 'styled-components'
 import {useStores} from '../stores'
 import {useNavigate} from 'react-router-dom'
+import { message } from 'antd'
 
 const Wrapper = styled.div`
     max-width: 600px;
@@ -27,7 +28,7 @@ const Component = () => {
         console.log('注册成功')
         history('./')
     })
-      .catch(()=>{console.log('注册失败')})
+      .catch(()=>{message.error('注册失败')})
     };
   
     const onFinishFailed = (errorInfo) => {

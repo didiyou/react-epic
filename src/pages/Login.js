@@ -3,6 +3,7 @@ import { Form, Input, Button, Checkbox } from 'antd'
 import styled from 'styled-components'
 import {useStores} from '../stores'
 import {useNavigate} from 'react-router-dom'
+import { message } from 'antd'
 
 const Wrapper = styled.div`
     max-width: 600px;
@@ -25,7 +26,7 @@ const Component = () => {
         console.log('登录成功')
         history('./')
       }).catch(
-        (err)=>{console.log('登陆失败')
+        (err)=>{message.error('登录失败')
       }
       )
     };

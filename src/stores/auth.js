@@ -1,7 +1,8 @@
 import { observable, action, makeObservable } from 'mobx'
 import {Auth} from '../models'
-import userStore from './user'
-
+import UserStore from './user'
+import HistoryStore from './history'
+import ImageStore from './image'
 class AuthStore {
     constructor(){
         makeObservable(this)
@@ -24,12 +25,11 @@ class AuthStore {
         return new Promise((resolve,reject)=>{
             Auth.login(this.values.username,this.values.password)
         .then(user=>{
-            userStore.pullUser()
+            UserStore.pullUser()
             resolve(user)
         })
         .catch(err=>{
-            userStore.resetUser()
-            console.log('成功')
+            UserStore.resetUser()
             console.log(err)
             reject(err)
         })
@@ -39,10 +39,10 @@ class AuthStore {
     return new Promise((resolve,reject)=>{
         Auth.register(this.values.username,this.values.password)
         .then(user=>{
-            userStore.pullUser()
+            UserStore.pullUser()
             resolve(user)
         }).catch(err=>{
-            userStore.resetUser()
+            UserStore.resetUser()
             reject(err)
         }
         )
@@ -51,8 +51,10 @@ class AuthStore {
 
 
     @action logout(){
+        HistoryStore.resetUser()
         Auth.logout()
-        userStore.resetUser()
+        UserStore.resetUser()
+        ImageStore.reset()
     }
 }
     export default new AuthStore()

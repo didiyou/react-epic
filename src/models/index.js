@@ -33,7 +33,6 @@ login(username,password){
     return new Promise((resolve,reject)=>{
         User.logIn(username, password).then(loginedUser=>
             {
-            
             resolve(loginedUser)
         },error=>{
             console.log('error is :',error)
@@ -53,14 +52,12 @@ const Uploader = {
     add(file,filename){
     const item = new AV.Object('Image')
     const avFile = new AV.File(filename,file)
-    item.set(filename,filename)
-    item.set('owner',AV.User.current())
+    item.set('filename',filename)
+    item.set('owner',AV.User.current().attributes)
+    console.log(AV.User.current())
     item.set('url',avFile)
     return new Promise((resolve,reject)=>{
-        item.save().then((serverFile)=>{
-            console.log('保存成功')
-            resolve(serverFile)
-        },
+        item.save().then((serverFile)=>{console.log('保存成功'); resolve(serverFile)},
         error=>{
         console.log('保存失败')
         reject(error)}
@@ -72,10 +69,10 @@ const Uploader = {
         query.limit(limit)
         query.descending('createdAt')
         query.skip(page*limit)
-        query.equalTo('owner',AV.User.current())
+        query.equalTo('owner',AV.User.current().attributes)
         return new Promise((resolve,reject)=>{
             query.find()
-                .then(results=>resolve(results))
+                .then(results=>{resolve(results);console.log(results)})
                 .catch(error=>reject(error))
         })
     }

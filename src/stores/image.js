@@ -21,6 +21,7 @@ class ImageStore {
             Uploader.add(this.file,this.filename)
             .then(serverFile=>{
                 this.serverFile = serverFile
+                console.log(this.serverFile)
                 resolve(serverFile)
                 this.isUploading = false
             }).catch(err=>

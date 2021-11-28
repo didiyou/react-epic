@@ -1,7 +1,7 @@
 import React,{useEffect} from 'react'
 import {observer} from 'mobx-react'
 import {useStores} from '../stores'
-import InfiniteScroll from 'react-infinite-scroll-component'
+import InfiniteScroll from 'react-infinite-scroller'
 import { List,Spin } from 'antd'
 import styled from 'styled-components'
 
@@ -15,7 +15,7 @@ const Img = styled.img`
 const Component = observer(
     ()=>{
         const {HistoryStore} = useStores()
-        const option={
+        const options={
             initialLoad:true,
             pageStart:0,
             loadMore(){
@@ -26,21 +26,24 @@ const Component = observer(
             },
             useWindow:true
         }
+        
         useEffect(()=>{
-
+            console.log('加载List')
             return ()=>{
                 HistoryStore.reset()
             }
-        })
+        },[])
         return(
             <div>
-                <InfiniteScroll {...option}>
+                <InfiniteScroll {...options}>
+                    {console.log('获取的列表:',HistoryStore.list)}
                     <List dataSource={HistoryStore.list}
+                    
                           renderItem={
-                              item=>{
+                              item=>
                                  <List.Item key={item.id}>
                                      <div>
-                                         <Img   src={item.attributes.url.attributes.url} style={{height:'100px'}}/>
+                                         <Img src={item.attributes.url.attributes.url} style={{height:'100px'}}/>
                                      </div>
                                      <div>
                                          <h5>{item.attributes.filename}</h5>
@@ -49,7 +52,7 @@ const Component = observer(
                                          <a terget='_blank' href={item.attributes.url.attributes.url}>{item.attributes.url.attributes.url}</a>
                                      </div>
                                  </List.Item>
-                              }
+                              
                           }
                     >
                     {HistoryStore.isLoading && HistoryStore.hasMore &&(
@@ -59,7 +62,6 @@ const Component = observer(
                     )}
                     </List>
                 </InfiniteScroll>
-            List...
             </div>
         )
     }

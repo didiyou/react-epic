@@ -64,11 +64,16 @@ const Component = observer(()=>{
                 message.error('只能上传png/svg/jpg/gif格式的图片')
                 return false
             }
+            if(file.size > 2048*1024)
+            {
+                message.error('文件最大2M')
+                return false
+            }
             ImageStore.upload()
                 .then(()=>{
-                    console.log('上传文件成功')
+                    message.success('上传文件成功')
                 }).catch((err)=>{
-                    console.log('上传失败')
+                    message.error('上传失败')
                     console.log(err)
                 })
             return false
@@ -83,7 +88,7 @@ const Component = observer(()=>{
                 </p>
                 <p className="ant-upload-text">点击或者拖拽上传</p>
                 <p className="ant-upload-hint">
-                    仅支持.png/.gif/.jpg/.svg格式的图片，图片最大1M
+                    仅支持.png/.gif/.jpg/.svg格式的图片，图片最大2M
                 </p>
             </Dragger>
             </Spin>

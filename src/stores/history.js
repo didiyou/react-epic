@@ -1,23 +1,25 @@
-import { observable, action } from 'mobx'
+import { observable, action, makeObservable } from 'mobx'
 import {Uploader} from '../models'
 import { message } from 'antd'
 
 class HistoryStore {
+    constructor(){
+        makeObservable(this)
+    }
     @observable list = []
     @observable isLoading = false
     @observable hasMore = true
     @observable page = 0
     limit = 10
     @action append(newList){
-        console.log('调用append')
+        
         this.list = this.list.concat(newList)
-        console.log('list:',this.list)
+        
     }
     @action find(){
         this.isLoading = true
         Uploader.find({page:this.page,limit:this.limit})
             .then(newList =>{
-                // newList = newList.map(x=>x.attributes)
                 this.append(newList)
                 console.log('从leancode获取的newList:',newList)
                 this.page++

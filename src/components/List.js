@@ -15,6 +15,8 @@ const Img = styled.img`
 const Component = observer(
     ()=>{
         const {HistoryStore} = useStores()
+        
+        
         const options={
             initialLoad:true,
             pageStart:0,
@@ -30,13 +32,16 @@ const Component = observer(
         useEffect(()=>{
             console.log('加载List')
             return ()=>{
+                console.log('卸载List')
                 HistoryStore.reset()
             }
         },[])
+        window.HistoryStore = HistoryStore
+        console.log('HistoryStore.list:',HistoryStore.list)
         return(
             <div>
                 <InfiniteScroll {...options}>
-                    {console.log('获取的列表:',HistoryStore.list)}
+                    {console.log('List组件获取的列表:',HistoryStore.list)}
                     <List dataSource={HistoryStore.list}
                     
                           renderItem={

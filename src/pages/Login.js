@@ -23,8 +23,8 @@ const Component = () => {
       AuthStore.setPassword(values.password)
       AuthStore.login()
       .then(()=>{
-        console.log('登录成功')
-        history('./')
+        message.success('登录成功')
+        history(['./'])
       }).catch(
         (err)=>{message.error('登录失败')
       }
